@@ -1,50 +1,50 @@
 [
   {
     "orden": 1,
-    "etiqueta": "Tu primer añito",
+    "etiqueta": "Cuando eras bebé",
     "titulo": "Tu primera aventura en el agua",
     "foto": "fotos/timeline/t01.webp",
     "nota": "Chalecos puestos y tú tan tranquila. Desde ahí supe que ibas a ser valiente."
   },
   {
     "orden": 2,
-    "etiqueta": "1 año",
-    "titulo": "Tus primeros pasos",
+    "etiqueta": "Tus primeros años",
+    "titulo": "Paso a paso",
     "foto": "fotos/timeline/t02.webp",
     "nota": "Con tu falda de tul, caminando como si el mundo fuera tuyo."
   },
   {
     "orden": 3,
-    "etiqueta": "2017 · 2 años",
+    "etiqueta": "Tus primeros años",
     "titulo": "Nuestra primera ida al cine",
     "foto": "fotos/timeline/t03.webp",
     "nota": "Los Pitufos y tú, con tu gorrito rosado. Uno de mis recuerdos favoritos."
   },
   {
     "orden": 4,
-    "etiqueta": "2 años",
+    "etiqueta": "Tus primeros años",
     "titulo": "¡A volar en el columpio!",
     "foto": "fotos/timeline/t04.webp",
     "nota": "Siempre pedías más alto, más alto."
   },
   {
     "orden": 5,
-    "etiqueta": "3 años",
+    "etiqueta": "Pequeñita y traviesa",
     "titulo": "La reina del estilo",
     "foto": "fotos/timeline/t05.webp",
     "nota": "Gafas de corazón y la cara llena de chocolate. Pura actitud."
   },
   {
     "orden": 6,
-    "etiqueta": "4 años",
+    "etiqueta": "Creciendo",
     "titulo": "Valiente desde siempre",
     "foto": "fotos/timeline/t06.webp",
     "nota": "Arriba de una llama, sin miedo a nada."
   },
   {
     "orden": 7,
-    "etiqueta": "Septiembre 2019",
-    "titulo": "Tu primer año de escuela",
+    "etiqueta": "Tus años de escuela",
+    "titulo": "Lista para la escuela",
     "foto": "fotos/timeline/t07.webp",
     "nota": "Uniforme azul, trenza perfecta y una sonrisa enorme."
   },
