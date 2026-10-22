@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="theme-color" content="#1a0f2e" />
+  <title>¡Feliz cumpleaños, Emma!</title>
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext y='26' font-size='26'%3E%F0%9F%8E%82%3C/text%3E%3C/svg%3E" />
+
+  <meta property="og:title" content="¡Feliz cumpleaños, Emma!" />
+  <meta property="og:description" content="Un regalo hecho con mucho cariño." />
+  <meta property="og:image" content="fotos/og.jpg" />
+  <meta property="og:type" content="website" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:ital,wght@0,400;0,600;0,700;1,400&display=swap"
+    rel="stylesheet"
+  />
+
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <!-- Fondo ambiental (detrás de todo) -->
+  <div class="ambiente" id="ambiente" aria-hidden="true">
+    <div class="ambiente__wash"></div>
+  </div>
+
+  <!-- Bóveda de entrada (se muestra primero) -->
+  <div id="boveda" class="boveda" role="dialog" aria-modal="true" aria-label="Bóveda de entrada">
+    <div class="boveda__puerta">
+      <div class="boveda__anillo"></div>
+      <div class="boveda__manija" aria-hidden="true"></div>
+      <div class="boveda__panel">
+        <h2 class="boveda__titulo" data-config="boveda.titulo">Tu regalo está aquí</h2>
+        <p class="boveda__instruccion" data-config="boveda.instruccion">Ingresa la clave de 4 dígitos</p>
+        <div class="boveda__display" id="bovedaDisplay" aria-live="polite">
+          <span></span><span></span><span></span><span></span>
+        </div>
+        <p class="boveda__pista" id="bovedaPista" hidden></p>
+        <div class="boveda__teclado" id="bovedaTeclado">
+          <button type="button" data-d="1">1</button>
+          <button type="button" data-d="2">2</button>
+          <button type="button" data-d="3">3</button>
+          <button type="button" data-d="4">4</button>
+          <button type="button" data-d="5">5</button>
+          <button type="button" data-d="6">6</button>
+          <button type="button" data-d="7">7</button>
+          <button type="button" data-d="8">8</button>
+          <button type="button" data-d="9">9</button>
+          <button type="button" class="boveda__aux" data-accion="borrar" aria-label="Borrar">⌫</button>
+          <button type="button" data-d="0">0</button>
+          <button type="button" class="boveda__aux" data-accion="ok" aria-label="Confirmar">✓</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <audio id="musica" loop preload="auto"></audio>
+  <button id="musicaToggle" class="musica-toggle" type="button" hidden
+          aria-label="Pausar o reanudar la música">♪</button>
+
+  <!-- Navegación flotante -->
+  <nav class="nav" aria-label="Secciones">
+    <a href="#portada" data-label="Inicio" class="is-active"><span></span></a>
+    <a href="#carta" data-label="La carta"><span></span></a>
+    <a href="#historia" data-label="Cómo creciste"><span></span></a>
+    <a href="#videos" data-label="Videos"><span></span></a>
+    <a href="#galeria" data-label="Galería"><span></span></a>
+    <a href="#cierre" data-label="Final"><span></span></a>
+  </nav>
+
+  <!-- 1. PORTADA -->
+  <section id="portada" class="portada">
+    <canvas class="portada__canvas" data-numero="11" aria-hidden="true"></canvas>
+    <div class="portada__contenido">
+      <p class="portada__saludo">¡Feliz cumpleaños!</p>
+      <h1 class="portada__nombre" data-config="nombre">…</h1>
+      <p class="portada__sub" data-config="subtituloPortada">…</p>
+
+      <div class="contador" aria-live="off">
+        <div class="contador__item"><b data-cont="anios">0</b><span>años</span></div>
+        <div class="contador__item"><b data-cont="meses">0</b><span>meses</span></div>
+        <div class="contador__item"><b data-cont="dias">0</b><span>días</span></div>
+        <div class="contador__item"><b data-cont="horas">0</b><span>horas</span></div>
+      </div>
+      <p class="contador__etiqueta" data-config="etiquetaContador">…</p>
+
+      <button class="btn btn--entrar" type="button" data-config-text="botonPortada" data-goto="#carta">
+        Empezar
+      </button>
+    </div>
+    <div class="portada__scroll" aria-hidden="true">▾</div>
+  </section>
+
+  <!-- 2. LA CARTA -->
+  <section id="carta" class="seccion carta">
+    <h2 class="titulo-seccion">Una carta para ti</h2>
+    <div class="sobre" id="sobre" role="button" tabindex="0" aria-expanded="false"
+         aria-label="Abrir la carta">
+      <div class="sobre__tapa"></div>
+      <div class="sobre__cuerpo"></div>
+      <div class="sobre__papel">
+        <p class="sobre__pista">Toca el sobre</p>
+      </div>
+      <div class="sobre__corazon">★</div>
+    </div>
+
+    <article class="carta-texto" id="cartaTexto" hidden>
+      <h3 class="carta-texto__encabezado" data-carta="encabezado">…</h3>
+      <div class="carta-texto__cuerpo" data-carta="parrafos"></div>
+      <p class="carta-texto__firma" data-carta="firma"></p>
+      <p class="carta-texto__firma-nombre" data-carta="firmaNombre"></p>
+      <button class="btn btn--ghost" type="button" data-cerrar-carta>Cerrar la carta</button>
+    </article>
+  </section>
+
+  <!-- 3. LÍNEA DE TIEMPO -->
+  <section id="historia" class="seccion historia">
+    <h2 class="titulo-seccion">Así has crecido</h2>
+    <ol class="timeline" id="timeline"></ol>
+  </section>
+
+  <!-- 4. VIDEOS -->
+  <section id="videos" class="seccion cine">
+    <h2 class="titulo-seccion">Momentos en video</h2>
+    <div class="cine__pantalla">
+      <div class="cine__fondo" aria-hidden="true"></div>
+      <video class="cine__video" playsinline muted preload="metadata"></video>
+      <p class="cine__titulo"></p>
+    </div>
+    <button class="cine__sonido" type="button">🔈 Toca para escuchar</button>
+    <div class="cine__tira" aria-label="Lista de videos"></div>
+  </section>
+
+  <!-- 5. GALERÍA -->
+  <section id="galeria" class="seccion galeria">
+    <h2 class="titulo-seccion">La ruleta de recuerdos</h2>
+    <div class="carrusel3d carrusel3d--y" data-eje="y">
+      <div class="carrusel3d__giro"><div class="carrusel3d__anillo"></div></div>
+    </div>
+    <p class="carrusel3d__pista">Arrástrala para girar · toca una foto para verla</p>
+    <button class="btn btn--ghost" id="verTodas" type="button" hidden>Ver todas las fotos y videos</button>
+    <div class="galeria__grid" id="galeriaGrid" hidden></div>
+  </section>
+
+  <!-- 6. CIERRE -->
+  <section id="cierre" class="seccion cierre">
+    <div class="cierre__contenido">
+      <h2 class="titulo-seccion" data-config="cierre.titulo">…</h2>
+      <p class="cierre__mensaje" data-config="cierre.mensaje">…</p>
+      <div class="cierre__botones">
+        <button class="btn" type="button" data-confeti>🎉 ¡Más confeti!</button>
+        <button class="btn btn--ghost" type="button" data-goto="#carta">Volver a leer la carta</button>
+        <button class="btn btn--ghost" type="button" data-goto="#portada">Volver al inicio</button>
+      </div>
+      <p class="firma-autor" data-config="firmaAutor">Creado por Diego Aleman</p>
+      <p class="firma-autor firma-autor--credito" data-config="musica.credito"></p>
+    </div>
+  </section>
+
+  <!-- Visor de fotos -->
+  <div class="lightbox" id="lightbox" hidden aria-hidden="true" role="dialog" aria-modal="true" aria-label="Visor de fotos">
+    <button class="lightbox__btn lightbox__btn--cerrar" type="button" aria-label="Cerrar">✕</button>
+    <button class="lightbox__btn lightbox__btn--prev" type="button" aria-label="Anterior">‹</button>
+    <button class="lightbox__btn lightbox__btn--next" type="button" aria-label="Siguiente">›</button>
+    <figure class="lightbox__fig">
+      <div class="lightbox__media" id="lightboxMedia"></div>
+      <figcaption class="lightbox__caption" id="lightboxCaption"></figcaption>
+    </figure>
+  </div>
+
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"
+    integrity="sha512-dLxUelApnYxpLt6K2iomGngnHO83iUvZytA3YjDUCjT0HDOHKXnVYdf3hU4JjM8uEhxf9nD1/ey98U3t2vZ0qQ=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  ></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

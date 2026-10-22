@@ -1,0 +1,22 @@
+[
+  {
+    "src": "videos/v1.mp4",
+    "poster": "videos/v1.jpg",
+    "titulo": "Mi bebé"
+  },
+  {
+    "src": "videos/v2.mp4",
+    "poster": "videos/v2.jpg",
+    "titulo": "Al parque con papá"
+  },
+  {
+    "src": "videos/v3.mp4",
+    "poster": "videos/v3.jpg",
+    "titulo": "Lista para la cámara"
+  },
+  {
+    "src": "videos/v4.mp4",
+    "poster": "videos/v4.jpg",
+    "titulo": "Mi cantante favorita"
+  }
+]

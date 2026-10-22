@@ -1,0 +1,80 @@
+{
+  "encabezado": "Mi querida Emma Amelie,",
+  "bloques": [
+    {
+      "tipo": "parrafo",
+      "texto": "Hoy cumples 11 años y mi corazón no puede estar más lleno de orgullo y alegría. Te conocí desde que eras una bebé, y hoy veo a una niña increíble, única y genial en todos los sentidos: en tus gustos, en tu forma de ser y en esa luz tan especial que le pones a cada día."
+    },
+    {
+      "tipo": "fotos",
+      "fotos": [
+        {
+          "src": "fotos/timeline/t02.webp",
+          "etiqueta": "Así eras…"
+        },
+        {
+          "src": "fotos/timeline/t09.webp",
+          "etiqueta": "…y mírate hoy"
+        }
+      ]
+    },
+    {
+      "tipo": "parrafo",
+      "texto": "Llegar a los 11 años es una aventura maravillosa. Me encanta compartir momentos contigo y ver la persona tan talentosa en la que te estás convirtiendo."
+    },
+    {
+      "tipo": "parrafo",
+      "icono": "⚽",
+      "texto": "Amo con el alma que compartamos la misma pasión por el fútbol; ver tu entusiasmo y disfrutar de la cancha juntos es de los regalos más grandes que me da la vida."
+    },
+    {
+      "tipo": "parrafo",
+      "icono": "🎤",
+      "texto": "Y ni hablar de tus conciertos en la ducha: ¡siempre me saca una sonrisa escucharte cantar con tanta alegría y libertad! Nunca pierdas esa chispa tan tuya."
+    },
+    {
+      "tipo": "recuerda",
+      "titulo": "Recuerda siempre que…",
+      "items": [
+        {
+          "icono": "🏆",
+          "titulo": "Eres capaz de lograr todo lo que te propongas",
+          "texto": "Con la misma fuerza y pasión con la que juegas y cantas, puedes conquistar cualquier meta."
+        },
+        {
+          "icono": "✨",
+          "titulo": "Tu esencia es única",
+          "texto": "Sigue siendo tan auténtica, alegre y especial. El mundo necesita más de tu luz."
+        },
+        {
+          "icono": "📣",
+          "titulo": "Siempre seré tu fan número uno",
+          "texto": "No importa cuántos años cumplas ni cuánto crezcas: siempre tendrás en mí a tu compañero de equipo, tu refugio, un abrazo cálido y un apoyo incondicional en cada jugada de la vida."
+        }
+      ]
+    },
+    {
+      "tipo": "fotos",
+      "fotos": [
+        {
+          "src": "fotos/timeline/t03.webp",
+          "etiqueta": "Juntos desde siempre"
+        },
+        {
+          "src": "fotos/timeline/t08.webp",
+          "etiqueta": "Mi equipo favorito"
+        }
+      ]
+    },
+    {
+      "tipo": "parrafo",
+      "texto": "Deseo que este nuevo año de vida esté lleno de goles, canciones, risas, grandes momentos con tus amigos y aprendizajes inolvidables. Gracias por iluminar mi vida y por enseñarme a ser mejor cada día."
+    },
+    {
+      "tipo": "final",
+      "texto": "¡Feliz cumpleaños, mi campeona! Que sea un día tan maravilloso como tú."
+    }
+  ],
+  "firma": "Con todo mi amor, hoy y siempre,\nPapá",
+  "firmaNombre": "Santiago Ortega"
+}
