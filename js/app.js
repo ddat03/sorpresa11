@@ -875,21 +875,36 @@
   }
 
   /* =========================================================
-     VIDEOS — pantalla de cine con lista de reproducción
-     Se reproducen solos (sin sonido) al llegar a la sección;
-     al tocar "Escuchar" se activa el sonido y se pausa la música.
+     VIDEOS — pantalla de cine en rotación
+     Cada video se ve 2 s y pasa al siguiente con un fundido. En la
+     vuelta siguiente cada video sigue desde donde quedó (0-2, 2-4…).
+     Con "Escuchar" el video actual sigue completo con sonido y la
+     música se pausa; al terminar, la rotación continúa.
      ========================================================= */
   function iniciarVideos(lista) {
     var sec = $('#videos');
     if (!sec || !lista || !lista.length) { if (sec) sec.hidden = true; return; }
+    var TRAMO = 2;
     var pantalla = $('.cine__pantalla', sec);
     var fondo = $('.cine__fondo', sec);
-    var video = $('.cine__video', sec);
+    var molde = $('.cine__video', sec);
     var titulo = $('.cine__titulo', sec);
     var tira = $('.cine__tira', sec);
     var btnSonido = $('.cine__sonido', sec);
     var musica = $('#musica');
-    var actual = 0, conSonido = false, musicaPausadaPorVideo = false, enVista = false;
+    var actual = 0, inicioTramo = 0, conSonido = false, musicaPausadaPorVideo = false,
+      enVista = false, pausadoPorUsuario = false, cargados = false, inicioReloj = 0;
+    var pos = lista.map(function () { return 0; });
+
+    var vids = lista.map(function (v) {
+      var el = molde.cloneNode(false);
+      el.muted = true; el.playsInline = true; el.preload = 'metadata';
+      el.poster = encodeURI(v.poster);
+      el.src = encodeURI(v.src);
+      pantalla.insertBefore(el, titulo);
+      return el;
+    });
+    molde.remove();
 
     lista.forEach(function (v, i) {
       var b = document.createElement('button');
@@ -897,68 +912,102 @@
       b.className = 'cine__mini';
       b.setAttribute('aria-label', 'Ver video: ' + (v.titulo || (i + 1)));
       b.innerHTML = '<img src="' + encodeURI(v.poster) + '" alt="" loading="lazy"><span>' + escapar(v.titulo || '') + '</span>';
-      b.addEventListener('click', function () { cargar(i, true); });
+      b.addEventListener('click', function () { pausadoPorUsuario = false; mostrar(i); });
       tira.appendChild(b);
     });
 
+    function reproducir(el) { var p = el.play(); if (p && p.catch) p.catch(function () {}); }
     function pausarMusica() {
       if (musica && !musica.paused) { musica.pause(); musicaPausadaPorVideo = true; }
     }
     function reanudarMusica() {
-      if (musica && musicaPausadaPorVideo) {
-        musicaPausadaPorVideo = false;
-        var p = musica.play(); if (p && p.catch) p.catch(function () {});
-      }
+      if (musica && musicaPausadaPorVideo) { musicaPausadaPorVideo = false; reproducir(musica); }
     }
     function pintarSonido() {
       btnSonido.textContent = conSonido ? '🔊 Sonido activado' : '🔈 Toca para escuchar';
       btnSonido.classList.toggle('is-on', conSonido);
     }
-
-    function cargar(i, reproducir) {
-      actual = (i + lista.length) % lista.length;
-      var v = lista[actual];
-      pantalla.classList.add('cambiando');
-      setTimeout(function () {
-        video.src = encodeURI(v.src);
-        video.poster = encodeURI(v.poster);
-        fondo.style.backgroundImage = 'url("' + encodeURI(v.poster) + '")';
-        video.muted = !conSonido;
-        titulo.textContent = v.titulo || '';
-        $all('.cine__mini', tira).forEach(function (m, k) { m.classList.toggle('is-activo', k === actual); });
-        pantalla.classList.remove('cambiando');
-        if (reproducir) { var p = video.play(); if (p && p.catch) p.catch(function () {}); }
-      }, PREFIERE_MENOS_MOVIMIENTO ? 0 : 280);
+    function ajustar(i, t) {
+      var d = vids[i].duration;
+      return (d && t >= d - 0.4) ? 0 : t;
     }
+    function irA(el, t) { try { if (Math.abs(el.currentTime - t) > 0.05) el.currentTime = t; } catch (e) {} }
+
+    function mostrar(i) {
+      var previo = vids[actual];
+      actual = (i + lista.length) % lista.length;
+      var el = vids[actual], v = lista[actual];
+      pos[actual] = ajustar(actual, pos[actual]);
+      inicioTramo = pos[actual];
+      inicioReloj = Date.now();
+      irA(el, inicioTramo);
+      el.muted = !conSonido;
+      vids.forEach(function (o) { o.classList.toggle('is-visible', o === el); if (o !== el) o.muted = true; });
+      if (previo !== el) setTimeout(function () { if (vids[actual] !== previo) previo.pause(); }, 700);
+      fondo.style.backgroundImage = 'url("' + encodeURI(v.poster) + '")';
+      titulo.textContent = v.titulo || '';
+      $all('.cine__mini', tira).forEach(function (m, k) { m.classList.toggle('is-activo', k === actual); });
+      if (enVista && !pausadoPorUsuario) reproducir(el);
+      // dejar listo el siguiente en su punto de arranque
+      var sig = (actual + 1) % lista.length;
+      if (sig !== actual) irA(vids[sig], ajustar(sig, pos[sig]));
+    }
+
+    function avanzar() {
+      pos[actual] = ajustar(actual, inicioTramo + TRAMO);
+      mostrar(actual + 1);
+    }
+
+    vids.forEach(function (el, k) {
+      el.addEventListener('timeupdate', function () {
+        if (k !== actual || conSonido || pausadoPorUsuario) return;
+        if (el.currentTime >= inicioTramo + TRAMO) avanzar();
+      });
+      el.addEventListener('ended', function () {
+        if (k !== actual) return;
+        pos[k] = 0;
+        if (conSonido) { inicioTramo = 0; mostrar(actual + 1); } else { inicioTramo = el.duration || 0; avanzar(); }
+      });
+      el.addEventListener('click', function () {
+        if (el.paused) { pausadoPorUsuario = false; reproducir(el); } else { pausadoPorUsuario = true; el.pause(); }
+      });
+    });
+
+    // si un video tarda en cargar, se pasa al siguiente sin perder su punto
+    setInterval(function () {
+      var el = vids[actual];
+      if (!enVista || conSonido || pausadoPorUsuario) { inicioReloj = Date.now(); return; }
+      if (el.currentTime < inicioTramo + 0.2 && Date.now() - inicioReloj > 3500) mostrar(actual + 1);
+    }, 500);
 
     btnSonido.addEventListener('click', function () {
       conSonido = !conSonido;
-      video.muted = !conSonido;
-      if (conSonido) { pausarMusica(); var p = video.play(); if (p && p.catch) p.catch(function () {}); }
-      else reanudarMusica();
+      var el = vids[actual];
+      el.muted = !conSonido;
+      if (conSonido) { pausarMusica(); pausadoPorUsuario = false; reproducir(el); }
+      else { inicioTramo = el.currentTime; reanudarMusica(); }
       pintarSonido();
-    });
-    video.addEventListener('ended', function () { cargar(actual + 1, true); });
-    video.addEventListener('click', function () {
-      if (video.paused) { var p = video.play(); if (p && p.catch) p.catch(function () {}); } else video.pause();
     });
 
     if ('IntersectionObserver' in window) {
       new IntersectionObserver(function (es) {
         es.forEach(function (e) {
           enVista = e.isIntersecting;
-          if (enVista) { var p = video.play(); if (p && p.catch) p.catch(function () {}); }
-          else {
-            video.pause();
-            if (conSonido) { conSonido = false; video.muted = true; pintarSonido(); }
+          if (enVista) {
+            if (!cargados) { cargados = true; vids.forEach(function (o) { o.preload = 'auto'; }); mostrar(actual); }
+            if (!pausadoPorUsuario) reproducir(vids[actual]);
+          } else {
+            vids[actual].pause();
+            if (conSonido) { conSonido = false; vids[actual].muted = true; inicioTramo = vids[actual].currentTime; pintarSonido(); }
             reanudarMusica();
           }
         });
       }, { threshold: 0.35 }).observe(pantalla);
-    }
+    } else { enVista = true; }
     pintarSonido();
-    cargar(0, false);
+    mostrar(0);
   }
+
 
   /* =========================================================
      GALERÍA + LIGHTBOX
