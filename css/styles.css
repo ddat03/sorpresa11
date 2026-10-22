@@ -983,14 +983,14 @@ h1, h2, h3 { font-family: var(--fuente-titulo); font-weight: 600; line-height: 1
 
 /* carta: fotos tipo polaroid, tarjetas "recuerda", íconos */
 .carta-fotos { display: flex; justify-content: center; gap: 1rem; margin: 1.4rem 0 1.6rem; flex-wrap: wrap; }
-.carta-polaroid { margin: 0; background: #fff; padding: .5rem .5rem 1.6rem; width: min(44%, 210px);
+.carta-polaroid { margin: 0; background: #fff; padding: .5rem .5rem .55rem; width: min(44%, 210px);
   box-shadow: 0 10px 24px rgba(40,20,70,.18); transform: rotate(-3deg); position: relative;
   transition: transform .4s ease; }
 .carta-polaroid--der { transform: rotate(3deg); }
 .carta-polaroid:hover { transform: rotate(0) scale(1.04); }
 .carta-polaroid img { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; }
-.carta-polaroid figcaption { position: absolute; left: 0; right: 0; bottom: .25rem; text-align: center;
-  font-family: var(--fuente-titulo); color: var(--vino); font-size: 1rem; }
+.carta-polaroid figcaption { margin-top: .45rem; text-align: center; line-height: 1.2;
+  font-family: var(--fuente-titulo); color: var(--vino); font-size: clamp(.82rem, 3.6vw, 1rem); }
 .carta-polaroid::before { content: ""; position: absolute; top: -10px; left: 50%; width: 70px; height: 20px;
   transform: translateX(-50%) rotate(-2deg); background: rgba(249,168,212,.75); }
 .carta-con-icono { position: relative; padding-left: 2.6rem; }
