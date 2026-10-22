@@ -1265,6 +1265,163 @@
   }
 
   /* =========================================================
+     TÍTULOS — las letras aparecen una a una (desenfoque → nítido)
+     ========================================================= */
+  function partirLetras(el) {
+    if (!el || el.dataset.partido) return;
+    var texto = el.textContent;
+    el.dataset.partido = '1';
+    el.setAttribute('aria-label', texto);
+    el.textContent = '';
+    var n = 0;
+    texto.split(' ').forEach(function (palabra, w) {
+      if (w) el.appendChild(document.createTextNode(' '));
+      var sp = document.createElement('span');
+      sp.className = 'palabra';
+      sp.setAttribute('aria-hidden', 'true');
+      Array.prototype.forEach.call(palabra, function (ch) {
+        var l = document.createElement('span');
+        l.className = 'letra';
+        l.style.setProperty('--i', n++);
+        l.textContent = ch;
+        sp.appendChild(l);
+      });
+      el.appendChild(sp);
+    });
+  }
+
+  /* =========================================================
+     ÁRBOL QUE CRECE — tronco y ramas en forma de corazón que se
+     dibujan solos, flores que se abren y pétalos que caen.
+     ========================================================= */
+  function iniciarArbol() {
+    var cont = $('#arbol');
+    if (!cont) return;
+    var ramas = $('.arbol__ramas', cont), flores = $('.arbol__flores', cont);
+    var NS = 'http://www.w3.org/2000/svg';
+    function nodo(tag, attrs) {
+      var e = document.createElementNS(NS, tag);
+      for (var k in attrs) e.setAttribute(k, attrs[k]);
+      return e;
+    }
+    function trazo(d, ancho, inicio, dur, clase) {
+      var p = nodo('path', { d: d, 'stroke-width': ancho, pathLength: 1, 'stroke-linejoin': 'round', class: 'arbol__trazo ' + (clase || '') });
+      p.style.transitionDelay = inicio + 's';
+      p.style.transitionDuration = dur + 's';
+      ramas.appendChild(p);
+    }
+    var CX = 200, CIMA = 300;
+    // punto de un corazón (punta abajo en la cima del tronco); t: 0 = arriba, PI = punta
+    function corazon(t, s, lado) {
+      var x = 16 * Math.pow(Math.sin(t), 3);
+      var y = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
+      return [CX + lado * s * x, CIMA - 17 * s - s * y];
+    }
+    var colores = ['#ff4fa3', '#ff8fc8', '#ffd34d', '#b56bff', '#36d6c3', '#ffffff'];
+
+    // tronco y raíces
+    trazo('M200 468C188 436 214 408 202 378C192 352 210 326 200 300', 11, 0, 2.6);
+    trazo('M200 466C176 466 150 470 116 460', 4, 0.3, 1.6);
+    trazo('M200 466C226 466 252 470 286 460', 4, 0.3, 1.6);
+
+    var PASOS = 46;
+    [[9, 4.6, 32, 2.4], [6.6, 3.2, 18, 3.2], [4.2, 2.2, 9, 3.8]].forEach(function (nivel) {
+      var s = nivel[0], ancho = nivel[1], nFlores = nivel[2], inicio = nivel[3];
+      [1, -1].forEach(function (lado) {
+        var d = '';
+        for (var k = 0; k <= PASOS; k++) {
+          var p = corazon(Math.PI * (1 - k / PASOS), s, lado);
+          d += (k ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1);
+        }
+        trazo(d, ancho, inicio, 2.4);
+        // ramitas que salen hacia afuera (solo el corazón grande)
+        if (s === 9) {
+          for (var r = 4; r < PASOS; r += 4) {
+            var q = corazon(Math.PI * (1 - r / PASOS), s, lado);
+            var dx = q[0] - CX, dy = q[1] - (CIMA - 150), len = Math.hypot(dx, dy) || 1;
+            var ux = dx / len, uy = dy / len, largo = 10 + Math.random() * 10;
+            trazo('M' + q[0].toFixed(1) + ' ' + q[1].toFixed(1) + 'Q' + (q[0] + ux * largo / 2 - uy * 4).toFixed(1) + ' ' +
+              (q[1] + uy * largo / 2 + ux * 4).toFixed(1) + ' ' + (q[0] + ux * largo).toFixed(1) + ' ' + (q[1] + uy * largo).toFixed(1),
+              1.6, inicio + 1.6 + r * 0.02, 0.9);
+          }
+        }
+        // flores a lo largo de la rama
+        for (var f = 1; f <= nFlores; f++) {
+          var pr = f / nFlores;
+          var pt = corazon(Math.PI * (1 - pr * 0.98), s, lado);
+          var x = pt[0] + (Math.random() - 0.5) * 8, y = pt[1] + (Math.random() - 0.5) * 8;
+          var rad = (s === 9 ? 7 : 5.5) + Math.random() * 3;
+          var col = colores[Math.floor(Math.random() * colores.length)];
+          var g = nodo('g', { class: 'arbol__flor' });
+          for (var pe = 0; pe < 5; pe++) {
+            var an = pe * 1.2566 + Math.random() * 0.4;
+            g.appendChild(nodo('circle', { cx: (x + Math.cos(an) * rad * 0.8).toFixed(1), cy: (y + Math.sin(an) * rad * 0.8).toFixed(1),
+              r: (rad * 0.62).toFixed(1), fill: col, 'fill-opacity': 0.92 }));
+          }
+          g.appendChild(nodo('circle', { cx: x.toFixed(1), cy: y.toFixed(1), r: (rad * 0.38).toFixed(1), fill: col === '#ffd34d' ? '#ffffff' : '#ffd34d' }));
+          g.style.transitionDelay = (inicio + 2 + pr * 2.2 + Math.random() * 0.3).toFixed(2) + 's';
+          flores.appendChild(g);
+        }
+      });
+    });
+
+    function lluviaDePetalos() {
+      if (PREFIERE_MENOS_MOVIMIENTO) return;
+      var capa = $('.arbol__petalos', cont);
+      for (var i = 0; i < 22; i++) {
+        var p = document.createElement('i');
+        p.className = 'arbol__petalo';
+        p.style.left = (Math.random() * 92) + '%';
+        p.style.background = colores[i % 5];
+        p.style.animationDuration = (6 + Math.random() * 5).toFixed(1) + 's';
+        p.style.animationDelay = (Math.random() * 6).toFixed(1) + 's';
+        p.style.setProperty('--deriva', (60 + Math.random() * 120).toFixed(0) + 'px');
+        capa.appendChild(p);
+      }
+    }
+
+    function crecer() {
+      if (cont.classList.contains('crecer')) return;
+      cont.classList.add('crecer');
+      setTimeout(lluviaDePetalos, PREFIERE_MENOS_MOVIMIENTO ? 0 : 6500);
+    }
+    if (PREFIERE_MENOS_MOVIMIENTO || !('IntersectionObserver' in window)) { crecer(); return; }
+    new IntersectionObserver(function (es, obs) {
+      es.forEach(function (e) { if (e.isIntersecting) { crecer(); obs.disconnect(); } });
+    }, { threshold: 0.35 }).observe(cont);
+  }
+
+  /* =========================================================
+     CORAZÓN DE CRISTAL — el mensaje final se escribe letra a letra
+     ========================================================= */
+  function iniciarCorazonCristal(texto) {
+    var c = $('#corazonCristal');
+    if (!c || !texto) return;
+    var a = $('.tw-a', c), b = $('.tw-b', c);
+    a.textContent = ''; b.textContent = texto;
+    var empezado = false;
+    function escribir() {
+      if (empezado) return;
+      empezado = true;
+      c.classList.add('dibujar');
+      if (PREFIERE_MENOS_MOVIMIENTO) { a.textContent = texto; b.textContent = ''; c.classList.add('listo'); return; }
+      var i = 0;
+      setTimeout(function sig() {
+        a.textContent = texto.slice(0, i);
+        b.textContent = texto.slice(i);
+        if (i >= texto.length) { c.classList.add('listo'); return; }
+        var ch = texto.charAt(i);
+        i++;
+        setTimeout(sig, /[.,;!?:]/.test(ch) ? 260 : 42);
+      }, 1300);
+    }
+    if (!('IntersectionObserver' in window)) { escribir(); return; }
+    new IntersectionObserver(function (es, obs) {
+      es.forEach(function (e) { if (e.isIntersecting) { escribir(); obs.disconnect(); } });
+    }, { threshold: 0.25 }).observe(c);
+  }
+
+  /* =========================================================
      ARRANQUE
      ========================================================= */
   function mostrarErrorGlobal(msg) {
@@ -1274,17 +1431,21 @@
   document.addEventListener('DOMContentLoaded', function () {
     iniciarNavegacion();
     iniciarPortada();
+    iniciarArbol();
     construirLightbox();
     $all('.titulo-seccion').forEach(function (t) { t.classList.add('reveal'); revelar(t); });
 
     cargarJSON('data/config.json').then(function (cfg) {
       aplicarConfig(cfg);
+      $all('.titulo-seccion').forEach(partirLetras);
+      iniciarCorazonCristal(valorAnidado(cfg, 'cierre.mensaje'));
       iniciarAmbiente(cfg);
       iniciarMusica(cfg);
       iniciarBoveda(cfg);
     }).catch(function (e) {
       mostrarErrorGlobal(e);
       iniciarContador(null);
+      $all('.titulo-seccion').forEach(partirLetras);
       iniciarAmbiente(null);
       iniciarBoveda(null);
     });

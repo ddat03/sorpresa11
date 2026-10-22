@@ -24,6 +24,7 @@
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><clipPath id="clipCorazon" clipPathUnits="objectBoundingBox"><path d="M0.5 0.97C0.12 0.72 0 0.5 0 0.31C0 0.13 0.13 0.02 0.28 0.02C0.39 0.02 0.46 0.08 0.5 0.17C0.54 0.08 0.61 0.02 0.72 0.02C0.87 0.02 1 0.13 1 0.31C1 0.5 0.88 0.72 0.5 0.97Z"/></clipPath><linearGradient id="gradBorde" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffd34d"/><stop offset=".5" stop-color="#ff8fc8"/><stop offset="1" stop-color="#36d6c3"/></linearGradient></defs></svg>
   <!-- Fondo ambiental (detrás de todo) -->
   <div class="ambiente" id="ambiente" aria-hidden="true">
     <div class="ambiente__wash"></div>
@@ -122,6 +123,17 @@
   <section id="historia" class="seccion historia">
     <h2 class="titulo-seccion">Así has crecido</h2>
     <ol class="timeline" id="timeline"></ol>
+
+    <!-- árbol que crece -->
+    <div class="arbol" id="arbol">
+      <div class="arbol__petalos" aria-hidden="true"></div>
+      <svg class="arbol__svg" viewBox="0 0 400 470" role="img" aria-label="Un árbol en forma de corazón que crece y florece">
+        <defs><linearGradient id="gradTronco" gradientUnits="userSpaceOnUse" x1="0" y1="470" x2="0" y2="90"><stop offset="0" stop-color="#6b3f2a"/><stop offset=".55" stop-color="#b07a4f"/><stop offset="1" stop-color="#e9b78f"/></linearGradient></defs>
+        <g class="arbol__ramas" fill="none" stroke="url(#gradTronco)" stroke-linecap="round"></g>
+        <g class="arbol__flores"></g>
+      </svg>
+      <p class="arbol__msg" data-config="arbol.mensaje">Y sigues creciendo, cada día más fuerte y más brillante.</p>
+    </div>
   </section>
 
   <!-- 4. VIDEOS -->
@@ -151,7 +163,11 @@
   <section id="cierre" class="seccion cierre">
     <div class="cierre__contenido">
       <h2 class="titulo-seccion" data-config="cierre.titulo">…</h2>
-      <p class="cierre__mensaje" data-config="cierre.mensaje">…</p>
+      <div class="corazon-cristal" id="corazonCristal">
+        <div class="corazon-cristal__fondo"></div>
+        <svg class="corazon-cristal__borde" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M50 97C12 72 0 50 0 31C0 13 13 2 28 2C39 2 46 8 50 17C54 8 61 2 72 2C87 2 100 13 100 31C100 50 88 72 50 97Z" fill="none" stroke="url(#gradBorde)" stroke-width="1.1"/></svg>
+        <p class="corazon-cristal__txt" aria-live="polite"><span><span class="tw-a"></span><span class="tw-cursor" aria-hidden="true"></span><span class="tw-b"></span></span></p>
+      </div>
       <div class="cierre__botones">
         <button class="btn" type="button" data-confeti>🎉 ¡Más confeti!</button>
         <button class="btn btn--ghost" type="button" data-goto="#carta">Volver a leer la carta</button>

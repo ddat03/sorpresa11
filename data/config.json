@@ -23,7 +23,10 @@
   },
   "cierre": {
     "titulo": "¡Feliz cumpleaños, mi campeona!",
-    "mensaje": "Que sea un día tan maravilloso como tú. Te quiero hoy y siempre. — Papá"
+    "mensaje": "Gracias por iluminar mi vida y por enseñarme a ser mejor cada día. Que este nuevo año esté lleno de goles, canciones, risas y sueños cumplidos. Te quiero hoy y siempre, mi campeona. — Papá"
   },
-  "firmaAutor": "Creado por Diego Aleman"
+  "firmaAutor": "Creado por Diego Aleman",
+  "arbol": {
+    "mensaje": "Y sigues creciendo, cada día más fuerte y más brillante."
+  }
 }
